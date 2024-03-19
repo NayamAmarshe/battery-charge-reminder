@@ -1,7 +1,10 @@
-![New Project (12)](https://github.com/NayamAmarshe/battery-charge-reminder/assets/25067102/4a893bc5-9943-4287-aa47-578c2ef76265)
 
 # Battery Charge Reminder
 Never let your MacBook's battery catch you off guard again! Prolong the battery health by keeping a healthy charge cycle.
+
+# [DOWNLOAD](https://github.com/NayamAmarshe/battery-charge-reminder/releases/download/1.0/battery-charge-reminder.zip)
+
+![New Project (12)](https://github.com/NayamAmarshe/battery-charge-reminder/assets/25067102/4a893bc5-9943-4287-aa47-578c2ef76265)
 
 ## Key Features:
 
