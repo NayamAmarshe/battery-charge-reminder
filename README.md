@@ -31,3 +31,6 @@ Battery Charge Reminder runs discreetly in the background, utilizing minimal sys
 - **Seamless Integration:** Battery Charge Reminder seamlessly integrates into your macOS environment, providing uninterrupted support.
 
 Don't let battery concerns disrupt your productivity :)
+
+## Privacy
+This app does not collect any data, nor does it use the internet. Everything stays on your device.
