@@ -31,14 +31,14 @@ struct ContentView: View {
                         print(batteryMonitor.minThreshold)
                     }.padding()
                 }
-
+                
                 VStack(alignment: .leading) {
                     Text("Maximum Threshold: \(batteryMonitor.maxThreshold, specifier: "%.f")%")
                     Slider(value: $batteryMonitor.maxThreshold, in: (batteryMonitor.minThreshold < 99 ? batteryMonitor.minThreshold + 1 : batteryMonitor.minThreshold)...100, step: 1) {_ in
                         print(batteryMonitor.maxThreshold)
                     }.padding()
                 }
-
+                
                 VStack(alignment: .leading) {
                     Text("Reminder Frequency: \(Int(batteryMonitor.reminderFrequency)) minutes")
                     Slider(value: $batteryMonitor.reminderFrequency, in: 1...60, step: 1).padding()
