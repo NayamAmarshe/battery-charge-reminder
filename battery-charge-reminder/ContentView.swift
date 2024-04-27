@@ -8,6 +8,7 @@
 import SwiftUI
 import UserNotifications
 import IOKit.ps
+import Cocoa
 
 struct ContentView: View {
     @StateObject private var batteryMonitor = BatteryMonitor.shared
@@ -63,7 +64,64 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var statusBarItem: NSStatusItem!
     var popover: NSPopover!
     
+    func openNotificationSettings() {
+        // Check if the app has a valid bundle identifier
+        if let bundleIdentifier = Bundle.main.bundleIdentifier {
+            // Create the URL using the bundle identifier (id parameter)
+            let url = URL(string: "x-apple.systempreferences:com.apple.preference.notifications?id=\(bundleIdentifier)")
+            
+            // Safely open the URL using NSWorkspace
+            if let validURL = url {
+                NSWorkspace.shared.open(validURL)
+            }
+        }
+    }
+    
+    func showAlertToGuideUserToSystemPreferences() {
+        // Dispatch to the main queue
+        DispatchQueue.main.async {
+            // Create a custom alert using NSAlert
+            let alert = NSAlert()
+            alert.messageText = "Notification Permissions Denied"
+            alert.informativeText = "Please enable notification permissions for this app in System Preferences."
+            alert.alertStyle = .warning
+            alert.addButton(withTitle: "OK")
+            
+            // Safely unwrap NSApp.mainWindow
+            if let mainWindow = NSApp.mainWindow {
+                alert.beginSheetModal(for: mainWindow) { response in
+                    if response == .alertFirstButtonReturn {
+                        // Open Notification settings for your app in System Preferences
+                        self.openNotificationSettings()
+                    }
+                }
+            } else {
+                // If no main window is available, display the alert in a different way
+                let response = alert.runModal()
+                if response == .alertFirstButtonReturn {
+                    // Open Notification settings for your app in System Preferences
+                    self.openNotificationSettings()
+                }
+            }
+        }
+    }
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if let error = error {
+                // Handle the error
+                print("Notification authorization error: \(error.localizedDescription)")
+                self.showAlertToGuideUserToSystemPreferences()
+            } else {
+                if granted {
+                    print("Notification authorization granted")
+                } else {
+                    print("Notification authorization denied")
+                }
+            }
+        }
+        
         // Create a status bar item
         statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusBarItem.button {
@@ -161,7 +219,7 @@ class BatteryMonitor: ObservableObject {
                     if let currentType = source[kIOPSTypeKey] as? String,
                        currentType == kIOPSInternalBatteryType {
                         if let isCharging = source[kIOPSIsChargingKey] as? Bool {
-                            print("is Charging")
+                            print("is Charging \(isCharging)")
                             return isCharging
                         }
                     }
